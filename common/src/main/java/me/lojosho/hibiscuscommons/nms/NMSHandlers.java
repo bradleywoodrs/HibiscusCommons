@@ -105,12 +105,18 @@ public class NMSHandlers {
     }
 
     private static String getMinecraftVersion(String bukkitVersion) {
-        String minecraftVersion = bukkitVersion.substring(0, bukkitVersion.indexOf('-')); // Legacy-wise this is enough
-        if (minecraftVersion.contains("build")) {
-            // Paper new 26.1+ versioning system; Ex. 26.1.2.build.51-beta
-            minecraftVersion = minecraftVersion.substring(0, minecraftVersion.indexOf(".build"));
+
+        int dashIndex = bukkitVersion.indexOf('-');
+        if (dashIndex != -1) {
+            bukkitVersion = bukkitVersion.substring(0, dashIndex);
         }
-        return minecraftVersion;
+
+        int buildIndex = bukkitVersion.indexOf(".build");
+        if (buildIndex != -1) {
+            bukkitVersion = bukkitVersion.substring(0, buildIndex);
+        }
+
+        return bukkitVersion;
     }
 
     private record MinecraftVersionInformation(String internalReference, boolean supported) {}
